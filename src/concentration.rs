@@ -1,9 +1,9 @@
-use crate::utils;
-use std::error as std_error;
+use crate::dimension;
 use std::f32;
+use std::ops::{Add, Mul};
 
-pub trait Concentration: Sized {
-    fn new(value: f32) -> Result<Self, Error>;
+pub trait Concentration: dimension::Dimension + dimension::DimensionLess + Sized {
+    fn new(value: f32) -> Result<Self, dimension::Error>;
 }
 
 #[derive(Debug, Clone, Copy)]
@@ -12,18 +12,46 @@ pub struct SpecificGravity {
     _secret: (),
 }
 
+impl dimension::Dimension for SpecificGravity {
+    fn value(self) -> f32 {
+        self.value
+    }
+}
+
+impl dimension::DimensionLess for SpecificGravity {}
+
 impl Concentration for SpecificGravity {
-    fn new(value: f32) -> Result<SpecificGravity, Error> {
+    fn new(value: f32) -> Result<SpecificGravity, dimension::Error> {
         if value.is_nan() {
-            return Err(Error::ValueError("NaN value".into()));
+            return Err(dimension::Error::ValueError("NaN value".into()));
         }
         if value.is_sign_negative() {
-            return Err(Error::ValueError(format!(
+            return Err(dimension::Error::ValueError(format!(
                 "Expected non-negative value, got: {}.",
                 value.to_string()
             )));
         }
         Ok(SpecificGravity { value, _secret: () })
+    }
+}
+
+impl<T> Mul<T> for SpecificGravity
+where
+    T: dimension::Dimension + Mul<f32, Output = T>,
+{
+    type Output = T;
+    fn mul(self, rhs: T) -> Self::Output {
+        rhs * self.value
+    }
+}
+
+impl Add for SpecificGravity {
+    type Output = Self;
+    fn add(self, other: Self) -> Self {
+        Self {
+            value: self.value + other.value,
+            _secret: (),
+        }
     }
 }
 
@@ -33,13 +61,21 @@ pub struct Plato {
     _secret: (),
 }
 
+impl dimension::Dimension for Plato {
+    fn value(self) -> f32 {
+        self.value
+    }
+}
+
+impl dimension::DimensionLess for Plato {}
+
 impl Concentration for Plato {
-    fn new(value: f32) -> Result<Plato, Error> {
+    fn new(value: f32) -> Result<Plato, dimension::Error> {
         if value.is_nan() {
-            return Err(Error::ValueError("NaN value".into()));
+            return Err(dimension::Error::ValueError("NaN value".into()));
         }
         if value.is_sign_negative() {
-            return Err(Error::ValueError(format!(
+            return Err(dimension::Error::ValueError(format!(
                 "Expected non-negative value, got: {}.",
                 value.to_string()
             )));
@@ -72,34 +108,12 @@ impl From<Plato> for SpecificGravity {
     }
 }
 
-#[derive(Debug, Clone, PartialEq)]
-pub enum Error {
-    ValueError(String),
-}
-
-impl std::fmt::Display for Error {
-    fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
-        match self {
-            Error::ValueError(description) => write!(f, "{}", description),
-        }
-    }
-}
-
-impl std_error::Error for Error {
-    fn description(&self) -> &str {
-        match *self {
-            Error::ValueError(_) => "ValueError",
-        }
-    }
-
-    fn cause(&self) -> Option<&dyn std_error::Error> {
-        None
-    }
-}
-
 #[cfg(test)]
 mod tests {
     use super::*;
+    use crate::utils;
+    use crate::volume;
+    use crate::volume::Volume;
     /// Test some randomly picked values from here:
     /// https://www.brewersfriend.com/plato-to-sg-conversion-chart/
     #[test]
@@ -136,5 +150,19 @@ mod tests {
             let plato: Plato = sg.into();
             assert!(utils::f32_almost_equal(value.0, plato.value, Some(0.1)));
         }
+    }
+
+    #[test]
+    fn add_ops_test() {
+        let dens_1 = SpecificGravity::new(1.1).unwrap();
+        let dens_2 = SpecificGravity::new(2.3).unwrap();
+        assert_eq!((dens_1 + dens_2).value, 3.4);
+    }
+
+    #[test]
+    fn mul_ops_test() {
+        let vol = volume::Litre::new(3.0).unwrap();
+        let dens = SpecificGravity::new(1.1).unwrap();
+        assert_eq!((dens * vol).value, 3.0 * 1.1);
     }
 }
