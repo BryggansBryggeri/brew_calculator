@@ -13,9 +13,13 @@ either in closed source brewing software or in random browser calculators.
 We realised it would actually be neat to spend some time on this library and develop it
 guided by the following principles:
 
-## Open
+## Open and common
 The library will be free for all to use and modify as long as they display their use of it.
 This will ensure a set of accessible, standardised and transparent calculations.
+
+The external API ought to be easy to stabilise,
+since it really is a predefined set of formulas and calculations that are exposed.
+Then bug fixes and other updates can be pushed without breaking changes.
 
 ## Opinionated
 How standardise, when there is no standard?
@@ -26,7 +30,17 @@ if there isn't a very compelling argument against it.
 E.g. it seems overly zealous to use degrees Kelvin instead of Celsius and the latter should be favoured.
 Conversions to Fahrenheit though, will of course not be implemented.
 
-## Dimensionality safety
+## Well-documented and tested
+Now, how do you calculate the IBU?
+It is surprisingly tricky to find a conclusive answer on internet.com.
+We will strive to have excellent documentation so that the library can also function as a reference.
+
+Extensive testing is easy since it really is only a set of formulas,
+for which an infinite amount of test cases are readily available.
+
+Using Rust we can also accomplish formal testing:
+
+### Dimensionality safety
 Leveraging Rust's type safety the aim is to ensure that the calculations can be trusted.
 All quantities, even though they can be represented as ordinary numbers,
 have their own type and unit of measurement.
