@@ -1,3 +1,7 @@
+# Lib
+README.html
+
+# Rust
 /target
 **/*.rs.bk
 Cargo.lock
