@@ -1,10 +1,15 @@
 [package]
 name = "brew_calculator"
 version = "0.1.0"
-authors = ["Jakob <jakob.lindqvist@chalmers.se>"]
+authors = ["Jakob <jakob.lindqvist.92@gmail.com>"]
 edition = "2018"
+description = "Brew calculator"
+license = "GPL-3.0"
+license_file = "LICENSE"
+repository = "https://github.com/BryggansBryggeri/brew_calculator"
 
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+[lib]
+crate-type = ["cdylib"]
 
 [dependencies]
 wasm-bindgen = "0.2.50"

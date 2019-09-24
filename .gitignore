@@ -6,6 +6,9 @@ README.html
 **/*.rs.bk
 Cargo.lock
 
+# WASM
+pkg
+
 # Tags
 tags
 tags.temp

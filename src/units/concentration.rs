@@ -1,9 +1,21 @@
-use crate::dimension;
+use crate::units::dimension;
 use std::f32;
-use std::ops::{Add, Mul};
+use std::ops::{Add, Mul, Sub};
 
 pub trait Concentration: dimension::Dimension + dimension::DimensionLess + Sized {
     fn new(value: f32) -> Result<Self, dimension::Error>;
+}
+
+#[derive(Debug, Clone, Copy)]
+pub struct AlcoholByVolume {
+    pub value: f32,
+    _secret: (),
+}
+
+impl AlcoholByVolume {
+    pub fn new(value: f32) -> AlcoholByVolume {
+        AlcoholByVolume { value, _secret: () }
+    }
 }
 
 #[derive(Debug, Clone, Copy)]
@@ -45,11 +57,31 @@ where
     }
 }
 
+impl Mul<f32> for SpecificGravity {
+    type Output = Self;
+    fn mul(self, rhs: f32) -> Self::Output {
+        SpecificGravity {
+            value: rhs * self.value,
+            _secret: (),
+        }
+    }
+}
+
 impl Add for SpecificGravity {
     type Output = Self;
     fn add(self, other: Self) -> Self {
         Self {
             value: self.value + other.value,
+            _secret: (),
+        }
+    }
+}
+
+impl Sub for SpecificGravity {
+    type Output = Self;
+    fn sub(self, other: Self) -> Self {
+        Self {
+            value: self.value - other.value,
             _secret: (),
         }
     }
@@ -111,9 +143,9 @@ impl From<Plato> for SpecificGravity {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use crate::units::volume;
+    use crate::units::volume::Volume;
     use crate::utils;
-    use crate::volume;
-    use crate::volume::Volume;
     /// Test some randomly picked values from here:
     /// https://www.brewersfriend.com/plato-to-sg-conversion-chart/
     #[test]

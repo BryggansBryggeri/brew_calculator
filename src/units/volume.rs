@@ -1,4 +1,4 @@
-use crate::dimension;
+use crate::units::dimension;
 use std::f32;
 use std::ops::{Add, Mul};
 
