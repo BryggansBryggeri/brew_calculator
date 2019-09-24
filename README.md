@@ -97,8 +97,8 @@ It is rather the benefit of having the same backend being used, regardless if it
 - [ ] Implements all necessary functions with simple floats
 - [ ] Documented
 - [ ] Tested
-- [ ] Type safety
+- [ ] Type safe
 - [ ] Dimensionality safe
 - [x] Rust library
 - [ ] Purely functional
-- [ ] Compiles to JS/Wasm
+- [x] Compiles to JS/Wasm
