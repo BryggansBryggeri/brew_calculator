@@ -1,5 +1,10 @@
+//! Misc. utilities
+
 use std::f32;
 
+/// Helper function for comparing floats.
+///
+/// Particular use case: unit tests
 pub fn f32_almost_equal(a: f32, b: f32, tolerance: Option<f32>) -> bool {
     let tolerance = tolerance.unwrap_or(f32::EPSILON);
     let abs_a = a.abs();
