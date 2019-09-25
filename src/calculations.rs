@@ -26,7 +26,7 @@ pub fn strike_water_volume(grain_weight: f32, mash_thickness: f32) -> f32 {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::utils;
+    use assert_approx_eq::assert_approx_eq;
     #[test]
     fn test_abv_from_gravity_diff() {
         let test_values: Vec<(f32, f32, f32)> = vec![
@@ -38,7 +38,7 @@ mod tests {
             let og = value.1;
             let abv = abv_from_gravity_diff(sg, og);
             println!("{}", abv);
-            assert!(utils::f32_almost_equal(value.2, abv, Some(0.001)));
+            assert_approx_eq!(value.2, abv, 0.001);
         }
     }
 }
