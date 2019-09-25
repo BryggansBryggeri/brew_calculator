@@ -5,7 +5,6 @@ authors = ["Jakob <jakob.lindqvist.92@gmail.com>"]
 edition = "2018"
 description = "Brew calculator"
 license = "GPL-3.0"
-license_file = "LICENSE"
 repository = "https://github.com/BryggansBryggeri/brew_calculator"
 
 [lib]
@@ -13,3 +12,6 @@ crate-type = ["cdylib"]
 
 [dependencies]
 wasm-bindgen = "0.2.50"
+
+[dev-dependencies]
+assert_approx_eq = "1.1.0"

@@ -1,4 +1,3 @@
-mod calculations;
-mod units;
-mod utils;
-mod wasm_api;
+//! # BRYGGANS BRYGGERI BÄRS BB's brew calculator
+
+pub mod calculations;
