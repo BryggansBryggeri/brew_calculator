@@ -5,7 +5,6 @@ authors = ["Jakob <jakob.lindqvist.92@gmail.com>"]
 edition = "2018"
 description = "Brew calculator"
 license = "GPL-3.0"
-license_file = "LICENSE"
 repository = "https://github.com/BryggansBryggeri/brew_calculator"
 
 [lib]
