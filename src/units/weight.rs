@@ -1,6 +1,6 @@
 use crate::units::dimension;
 use std::f32;
-use std::ops::{Add, Mul};
+use std::ops::{Add, Mul, Sub};
 
 pub trait Weight: dimension::Dimension + Sized {
     fn new(value: f32) -> Result<Self, dimension::Error>;
@@ -56,7 +56,7 @@ impl Add for Kilogram {
 
 impl Sub for Kilogram {
     type Output = Self;
-    fn add(self, rhs: Kilogram) -> Self::Output {
+    fn sub(self, rhs: Kilogram) -> Self::Output {
         Kilogram {
             value: self.value - rhs.value,
             _secret: (),
@@ -64,68 +64,8 @@ impl Sub for Kilogram {
     }
 }
 
-/// Gram
-#[derive(Debug, Clone, Copy)]
-pub struct Gram {
-    pub value: f32,
-    _secret: (),
-}
-
-impl dimension::Dimension for Gram {
-    fn value(self) -> f32 {
-        self.value
-    }
-}
-
-impl Weight for Gram {
-    fn new(value: f32) -> Result<Gram, dimension::Error> {
-        if value.is_nan() {
-            return Err(dimension::Error::ValueError("NaN value".into()));
-        }
-        if value.is_sign_negative() {
-            return Err(dimension::Error::ValueError(format!(
-                "Expected non-negative value, got: {}.",
-                value.to_string()
-            )));
-        }
-        Ok(Gram { value, _secret: () })
-    }
-}
-
-impl Mul<f32> for Gram {
-    type Output = Self;
-    fn mul(self, rhs: f32) -> Self::Output {
-        Self {
-            value: self.value * rhs,
-            _secret: (),
-        }
-    }
-}
-
-impl Add for Gram {
-    type Output = Self;
-    fn add(self, rhs: Gram) -> Self::Output {
-        Gram {
-            value: self.value + rhs.value,
-            _secret: (),
-        }
-    }
-}
-
-impl Sub for Gram {
-    type Output = Self;
-    fn add(self, rhs: Gram) -> Self::Output {
-        Gram {
-            value: self.value - rhs.value,
-            _secret: (),
-        }
-    }
-}
-
-
-
-/// Tests
-#[cfg(test)]
+/* Tests
+ #[cfg(test)]
 mod tests {
     use super::*;
     #[test]
@@ -134,4 +74,4 @@ mod tests {
         let weight_2 = Weight::new(2.3).unwrap();
         assert_eq!((weight_1 + weight_2).value, 3.4);
     }
-}
+} */
