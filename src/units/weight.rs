@@ -71,7 +71,7 @@ mod tests {
     #[test]
     fn add_ops_test() {
         let weight_1 = Kilogram::new(1.1).unwrap();
-        let weight_2 = Weight::new(2.3).unwrap();
+        let weight_2 = Kilogram::new(2.3).unwrap();
         assert_eq!((weight_1 + weight_2).value, 3.4);
     }
 } */
