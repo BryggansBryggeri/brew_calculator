@@ -38,7 +38,14 @@ Conversions to Fahrenheit though, will of course not be implemented.
 Now, how do you calculate the IBU?
 It is surprisingly tricky to find a conclusive answer on internet.com.
 We will strive to have excellent documentation so that the library can also function as a reference.
-Useful: https://docs.rs/rustdoc-katex-demo/0.1.5/rustdoc_katex_demo/
+
+The mathematical notation in the documentation is rendered with
+(Katex)[https://docs.rs/rustdoc-katex-demo/0.1.5/rustdoc_katex_demo/].
+
+Generate the docs with:
+```bash
+RUSTDOCFLAGS="--html-in-header utils/katex-header.html" cargo doc --document-private-items --no-deps
+```
 
 Extensive testing is easy since it really is only a set of formulas,
 for which an infinite amount of test cases are readily available.

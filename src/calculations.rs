@@ -7,10 +7,16 @@ use wasm_bindgen::prelude::*;
 /// Alcohol from gravity difference.
 ///
 /// Estimates the alcoholic concentration of the beer,
-/// given the *original gravity (OG)* and the *current gravity* of the wort.
+/// $$
+///     C_{ABV} = \kappa (S_O - S_C),
+/// $$
 ///
-/// Note: if the fermenation is done the current gravity is often referred to as the *final gravity
-/// (FG)*.
+/// where $C_{ABV}\ [-]$ is the alcohol ratio by volume,
+/// $S_G\ [-]$ is the *original gravity (OG)* and $S_C\ [-]$ is the current gravity.
+/// $\kappa\ [-] = 131.25$ is a unit conversion constant.
+///
+/// Note: if the fermenation is complete, the current gravity is often referred to as the *final
+/// gravity (FG)* $S_F$.
 #[wasm_bindgen]
 pub fn abv_from_gravity_diff(original_gravity: f32, current_gravity: f32) -> f32 {
     let gravity_diff = original_gravity - current_gravity;
