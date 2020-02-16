@@ -1,0 +1,1 @@
+pub const GRAVITY_TO_ALCOHOL_COEFF: f32 = 131.25;

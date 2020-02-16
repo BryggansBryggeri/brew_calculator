@@ -1,10 +1,12 @@
 //! # BRYGGANS BRYGGERI BÄRS BB's brew calculator
 //!
 //! ## Notation
-//! Variables are introduced with a symbol and the dimension in squared brackets.
+//! Quantities are introduced with a symbol and the dimension in squared brackets.
 //!
-//! Ex: Hop mass $m_H \[\text{kg}\]$.
+//! Ex: Hop mass $m \[\text{kg}\]$.
 //!
 //! Dimensionless quantities are denoted $\[-\]$
-
+//!
 pub mod calculations;
+pub mod constants;
+pub mod ibu;

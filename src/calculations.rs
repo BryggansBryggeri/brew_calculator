@@ -2,25 +2,27 @@
 //!
 //! This is the common entry point for both rust and wasm library.
 
+use crate::constants::*;
 use wasm_bindgen::prelude::*;
 
-/// Alcohol from gravity difference.
+/// Alcohol (ABV) from gravity difference.
 ///
 /// Estimates the alcoholic concentration of the beer,
 /// $$
-///     C_{ABV} = \kappa (S_O - S_C),
+///     C_{ABV} = \kappa (\rho_O - \rho_C),
 /// $$
 ///
 /// where $C_{ABV}\ [-]$ is the alcohol ratio by volume,
-/// $S_G\ [-]$ is the *original gravity (OG)* and $S_C\ [-]$ is the current gravity.
+/// $\rho_G\ [-]$ is the *original gravity (OG)* and $\rho_C\ [-]$ is the current gravity,
+/// defined in [SpecificGravity](struct.NotImplentedYet).
 /// $\kappa\ [-] = 131.25$ is a unit conversion constant.
 ///
 /// Note: if the fermenation is complete, the current gravity is often referred to as the *final
-/// gravity (FG)* $S_F$.
+/// gravity (FG)*
 #[wasm_bindgen]
 pub fn abv_from_gravity_diff(original_gravity: f32, current_gravity: f32) -> f32 {
     let gravity_diff = original_gravity - current_gravity;
-    gravity_diff * 131.25
+    gravity_diff * GRAVITY_TO_ALCOHOL_COEFF
 }
 
 /// Strike water volume from grain weight

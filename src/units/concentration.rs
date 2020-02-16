@@ -1,3 +1,4 @@
+//! Concentration units
 use crate::units::dimension;
 use std::f32;
 use std::ops::{Add, Mul, Sub};
@@ -18,6 +19,7 @@ impl AlcoholByVolume {
     }
 }
 
+/// Density
 #[derive(Debug, Clone, Copy)]
 pub struct SpecificGravity {
     pub value: f32,

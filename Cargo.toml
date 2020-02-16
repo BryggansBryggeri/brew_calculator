@@ -7,8 +7,8 @@ description = "Brew calculator"
 license = "GPL-3.0"
 repository = "https://github.com/BryggansBryggeri/brew_calculator"
 
-[lib]
-crate-type = ["cdylib"]
+#[lib]
+#crate-type = ["cdylib"]
 
 [dependencies]
 wasm-bindgen = "0.2.50"
