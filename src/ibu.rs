@@ -4,16 +4,15 @@
 ///
 /// https://www.backtoschoolbrewing.com/blog/2016/9/5/how-to-calculate-ibus
 ///
-/// `hop_mass` in units kg
-///
 /// $$
 ///     IBU = \frac{m \alpha U(t, \rho)}{V C_{G}(\rho)} \cdot 10^6,
 /// $$
-/// where $m$ [kg] is hop mass,
-/// $\alpha [-]$ is the alpha acid (percentage not fraction),
-/// $V$ [l] is the average boil volume (estimated with boil-off),
-/// $t$ [min] is the boil time and
-/// $\rho$ [-] is the wort gravity.
+///
+/// - $m$ [kg]: Hop mass,
+/// - $\alpha [-]$: Alpha acid (percentage not fraction),
+/// - $V$ [l]: Average boil volume (estimated with boil-off),
+/// - $t$ [min]: Boil time
+/// - $\rho$ [-]: Wort gravity.
 ///
 /// $U(t, \rho)$ and $C_G(\rho)$ is calculated with [`utilisation`](fn.utilisation.html) and
 /// [`gravity_correction_factor`](fn.gravity_correction_factor.html) respectively.
@@ -31,9 +30,9 @@ pub fn ibu(hop_mass: f32, alpha_acid: f32, volume: f32, boil_time: f32, wort_gra
 ///
 /// The utilisation is the product of two factors:
 /// The 'bigness factor' $C_{big}$ [-] and
-/// The 'Boil time factor' $C_{big}$ [-]:
+/// the 'Boil time factor' $C_{boil}$ [-]:
 /// $$
-///     U = C_{big} * C_{boil},
+///     U = C_{big}(\rho) C_{boil}(t),
 /// $$
 /// where
 /// $$

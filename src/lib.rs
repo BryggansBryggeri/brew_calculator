@@ -10,3 +10,4 @@
 pub mod calculations;
 pub mod constants;
 pub mod ibu;
+pub mod utils;
