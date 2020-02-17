@@ -9,19 +9,30 @@ use wasm_bindgen::prelude::*;
 ///
 /// Estimates the alcoholic concentration of the beer,
 /// $$
-///     C_{ABV} = \kappa (\rho_O - \rho_C),
+///     C_{ABV} = \kappa (\rho_{OG} - \rho_{CG}),
 /// $$
 ///
-/// where $C_{ABV}\ [-]$ is the alcohol ratio by volume,
-/// $\rho_G\ [-]$ is the *original gravity (OG)* and $\rho_C\ [-]$ is the current gravity,
+/// - $C_{ABV}\ [-]$: Alcohol ratio by volume,
+/// - $\rho_{OG}\ [-]$: *Original gravity (OG)*
+///
+/// - $\rho_{CG}\ [-]$: Current gravity,
 /// defined in [SpecificGravity](struct.NotImplentedYet).
-/// $\kappa\ [-] = 131.25$ is a unit conversion constant.
+///
+/// - $\kappa\ [-] = 131.25$: Unit conversion constant.
 ///
 /// Note: if the fermenation is complete, the current gravity is often referred to as the *final
 /// gravity (FG)*
+///
+/// ```
+/// # use brew_calculator::calculations::abv_from_gravity_diff;
+/// # use assert_approx_eq::assert_approx_eq;
+/// let (og, fg) = (1.055, 1.015);
+/// let est_abv = abv_from_gravity_diff(og, fg);
+/// assert_approx_eq!(est_abv, 5.25, 0.001);
+/// ```
 #[wasm_bindgen]
-pub fn abv_from_gravity_diff(original_gravity: f32, current_gravity: f32) -> f32 {
-    let gravity_diff = original_gravity - current_gravity;
+pub fn abv_from_gravity_diff(og: f32, current_gravity: f32) -> f32 {
+    let gravity_diff = og - current_gravity;
     gravity_diff * GRAVITY_TO_ALCOHOL_COEFF
 }
 
