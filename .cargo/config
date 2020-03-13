@@ -1,0 +1,7 @@
+[build]
+#rustdocflags = [ "--no-deps", "--html-in-header", "katex-header.html" ]
+rustdocflags = [
+  "--html-in-header",
+  "utils/katex-header.html"
+]
+
