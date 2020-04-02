@@ -11,6 +11,7 @@ repository = "https://github.com/BryggansBryggeri/brew_calculator"
 crate-type = ["rlib", "cdylib"]
 
 [dependencies]
+serde = {version = ">=1.0", features = ["derive"]}
 wasm-bindgen = "0.2.50"
 
 [dev-dependencies]

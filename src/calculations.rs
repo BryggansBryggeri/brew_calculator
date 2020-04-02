@@ -2,8 +2,10 @@
 //!
 //! This is the common entry point for both rust and wasm library.
 
-use crate::constants::*;
 use wasm_bindgen::prelude::*;
+
+/// Specific gravity to alchol (ABV) coefficient
+const GRAVITY_TO_ALCOHOL_COEFF: f32 = 131.25;
 
 /// Alcohol (ABV) from gravity difference.
 ///

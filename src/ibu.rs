@@ -1,27 +1,102 @@
 //! International bitterness units ($IBU$)
+//!
+//! - $m$ [kg]: Hop mass,
+//! - $\alpha [-]$: Alpha acid (percentage not fraction),
+//! - $V$ [l]: Average boil volume (estimated with boil-off),
+//! - $t$ [min]: Boil time
+//! - $\rho$ [-]: Wort gravity.
+use serde::{Deserialize, Serialize};
+
+/// IBU methods
+#[derive(Debug, Deserialize, Serialize, PartialEq, Clone, Copy)]
+pub enum Method {
+    ///See [tinseth_ibu](fn.tinseth_ibu.html)
+    Tinseth,
+    Rager,
+    Garetz,
+    Noonan,
+}
 
 /// IBU for a single hop addition
 ///
-/// https://www.backtoschoolbrewing.com/blog/2016/9/5/how-to-calculate-ibus
+/// Wrapper for different methods
+pub fn ibu(
+    method: Method,
+    hop_mass: f32,
+    alpha_acid: f32,
+    volume: f32,
+    boil_time: f32,
+    wort_gravity: f32,
+) -> f32 {
+    match method {
+        Method::Tinseth => tinseth_ibu(hop_mass, alpha_acid, volume, boil_time, wort_gravity),
+        Method::Rager => rager_ibu(hop_mass, alpha_acid, volume, boil_time, wort_gravity),
+        Method::Garetz => garetz_ibu(hop_mass, alpha_acid, volume, boil_time, wort_gravity),
+        Method::Noonan => noonan_ibu(hop_mass, alpha_acid, volume, boil_time, wort_gravity),
+    }
+}
+
+/// Tinseth IBU for a single hop addition
+///
+/// [Reference](https://www.realbeer.com/hops/research.html)
 ///
 /// $$
 ///     IBU = \frac{m \alpha U(t, \rho)}{V C_{G}(\rho)} \cdot 10^6,
 /// $$
 ///
-/// - $m$ [kg]: Hop mass,
-/// - $\alpha [-]$: Alpha acid (percentage not fraction),
-/// - $V$ [l]: Average boil volume (estimated with boil-off),
-/// - $t$ [min]: Boil time
-/// - $\rho$ [-]: Wort gravity.
-///
 /// $U(t, \rho)$ and $C_G(\rho)$ is calculated with [`utilisation`](fn.utilisation.html) and
 /// [`gravity_correction_factor`](fn.gravity_correction_factor.html) respectively.
-pub fn ibu(hop_mass: f32, alpha_acid: f32, volume: f32, boil_time: f32, wort_gravity: f32) -> f32 {
+pub fn tinseth_ibu(
+    hop_mass: f32,
+    alpha_acid: f32,
+    volume: f32,
+    boil_time: f32,
+    wort_gravity: f32,
+) -> f32 {
     // The original formula has a factor 1000, however here `hop_mass` is measured in kg
     // and the `alpha_acid` in percentage, not a fraction.
     let numerator = 10_000.0 * hop_mass * utilisation(boil_time, wort_gravity) * alpha_acid;
     let denominator = volume * gravity_correction_factor(wort_gravity);
     numerator / denominator
+}
+
+/// Rager IBU for a single hop addition
+///
+/// TODO: Docs should look like `tinset_ibu`
+pub fn rager_ibu(
+    hop_mass: f32,
+    alpha_acid: f32,
+    volume: f32,
+    boil_time: f32,
+    wort_gravity: f32,
+) -> f32 {
+    todo!();
+}
+
+/// Garetz IBU for a single hop addition
+///
+/// TODO: Docs should look like `tinset_ibu`
+pub fn garetz_ibu(
+    hop_mass: f32,
+    alpha_acid: f32,
+    volume: f32,
+    boil_time: f32,
+    wort_gravity: f32,
+) -> f32 {
+    todo!();
+}
+
+/// Noonan IBU for a single hop addition
+///
+/// TODO: Docs should look like `tinset_ibu`
+pub fn noonan_ibu(
+    hop_mass: f32,
+    alpha_acid: f32,
+    volume: f32,
+    boil_time: f32,
+    wort_gravity: f32,
+) -> f32 {
+    todo!();
 }
 
 /// Continuous approximation of utilisation factor $U$ [-] for a hop addition.
@@ -88,8 +163,8 @@ mod tests {
 
     ///https://www.backtoschoolbrewing.com/blog/2016/9/5/how-to-calculate-ibus
     #[test]
-    fn test_ibu() {
-        let calc_ibu = ibu(0.007, 8.5, 22.73, 15.0, 1.058);
+    fn test_tinseth_ibu() {
+        let calc_ibu = tinseth_ibu(0.007, 8.5, 22.73, 15.0, 1.058);
         assert_approx_eq!(calc_ibu, 2.74, 0.05);
     }
 }

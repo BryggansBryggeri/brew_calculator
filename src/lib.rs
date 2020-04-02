@@ -39,6 +39,6 @@
 #![cfg_attr(feature = "clippy", warn(unseparated_literal_suffix))]
 #![cfg_attr(feature = "clippy", warn(wrong_pub_self_convention))]
 pub mod calculations;
-pub mod constants;
 pub mod ibu;
+pub mod ph;
 pub mod utils;
