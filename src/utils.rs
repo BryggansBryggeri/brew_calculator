@@ -1,4 +1,5 @@
 //! General brew calculator utilities
+use std::f32;
 
 /// Linear interpolation of quantity
 ///
