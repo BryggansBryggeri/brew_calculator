@@ -51,7 +51,7 @@ mod tests {
     #[test]
     fn test_abv_from_gravity_diff() {
         let test_values: Vec<(f32, f32, f32)> = vec![
-            ///(OG, FG, AlcoholByVolume)
+            //(OG, FG, AlcoholByVolume)
             (1.055, 1.015, 5.25),
         ];
         for value in test_values {

@@ -1,4 +1,3 @@
-use crate::utils;
 use std::error as std_error;
 use std::f32;
 
@@ -7,9 +6,9 @@ pub trait Concentration: Sized {
 }
 
 #[derive(Debug, Clone, Copy)]
+#[non_exhaustive]
 pub struct SpecificGravity {
     pub value: f32,
-    _secret: (),
 }
 
 impl Concentration for SpecificGravity {
@@ -23,14 +22,14 @@ impl Concentration for SpecificGravity {
                 value.to_string()
             )));
         }
-        Ok(SpecificGravity { value, _secret: () })
+        Ok(SpecificGravity { value })
     }
 }
 
 #[derive(Debug, Clone, Copy)]
+#[non_exhaustive]
 pub struct Plato {
     pub value: f32,
-    _secret: (),
 }
 
 impl Concentration for Plato {
@@ -44,7 +43,7 @@ impl Concentration for Plato {
                 value.to_string()
             )));
         }
-        Ok(Plato { value, _secret: () })
+        Ok(Plato { value })
     }
 }
 
@@ -56,7 +55,6 @@ impl From<SpecificGravity> for Plato {
             -616.868 + 1111.14 * sg_value - 630.272 * sg_value.powi(2) + 135.997 * sg_value.powi(3);
         Plato {
             value: concentration_plato,
-            _secret: (),
         }
     }
 }
@@ -67,7 +65,6 @@ impl From<Plato> for SpecificGravity {
             + (concentration_plato.value / (258.6 - ((concentration_plato.value / 258.2) * 227.1)));
         SpecificGravity {
             value: concentration_sg,
-            _secret: (),
         }
     }
 }

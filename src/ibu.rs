@@ -1,16 +1,21 @@
 //! International bitterness units ($IBU$)
 //!
-//! - $m$ [kg]: Hop mass,
-//! - $\alpha [-]$: Alpha acid (percentage not fraction),
-//! - $V$ [l]: Average boil volume (estimated with boil-off),
-//! - $t$ [min]: Boil time
-//! - $\rho$ [-]: Wort gravity.
+//! - $m$ \[kg\]: Hop mass,
+//! - $\alpha \[-\]$: Alpha acid (percentage not fraction),
+//! - $V$ \[l\]: Average boil volume (estimated with boil-off),
+//! - $t$ \[min\]: Boil time
+//! - $\rho$ \[-\]: Wort gravity.
 use serde::{Deserialize, Serialize};
+
+use crate::{
+    concentration::SpecificGravity,
+    units::{Kilograms, Liters, Minutes, Percent},
+};
 
 /// IBU methods
 #[derive(Debug, Deserialize, Serialize, PartialEq, Clone, Copy)]
 pub enum Method {
-    ///See [tinseth_ibu](fn.tinseth_ibu.html)
+    ///See [`tinseth_ibu`]
     Tinseth,
     Rager,
     Garetz,
@@ -22,10 +27,10 @@ pub enum Method {
 /// Wrapper for different methods
 pub fn ibu(
     method: Method,
-    hop_mass: f32,
-    alpha_acid: f32,
-    volume: f32,
-    boil_time: f32,
+    hop_mass: Kilograms,
+    alpha_acid: Percent,
+    volume: Liters,
+    boil_time: Minutes,
     wort_gravity: f32,
 ) -> f32 {
     match method {
@@ -44,13 +49,13 @@ pub fn ibu(
 ///     IBU = \frac{m \alpha U(t, \rho)}{V C_{G}(\rho)} \cdot 10^6,
 /// $$
 ///
-/// $U(t, \rho)$ and $C_G(\rho)$ is calculated with [`utilisation`](fn.utilisation.html) and
-/// [`gravity_correction_factor`](fn.gravity_correction_factor.html) respectively.
+/// $U(t, \rho)$ and $C_G(\rho)$ are calculated with [`utilisation`] and
+/// [`gravity_correction_factor`] respectively.
 pub fn tinseth_ibu(
-    hop_mass: f32,
-    alpha_acid: f32,
-    volume: f32,
-    boil_time: f32,
+    hop_mass: Kilograms,
+    alpha_acid: Percent,
+    volume: Liters,
+    boil_time: Minutes,
     wort_gravity: f32,
 ) -> f32 {
     // The original formula has a factor 1000, however here `hop_mass` is measured in kg
@@ -64,10 +69,10 @@ pub fn tinseth_ibu(
 ///
 /// TODO: Docs should look like `tinset_ibu`
 pub fn rager_ibu(
-    hop_mass: f32,
-    alpha_acid: f32,
-    volume: f32,
-    boil_time: f32,
+    hop_mass: Kilograms,
+    alpha_acid: Percent,
+    volume: Liters,
+    boil_time: Minutes,
     wort_gravity: f32,
 ) -> f32 {
     todo!();
@@ -77,10 +82,10 @@ pub fn rager_ibu(
 ///
 /// TODO: Docs should look like `tinset_ibu`
 pub fn garetz_ibu(
-    hop_mass: f32,
-    alpha_acid: f32,
-    volume: f32,
-    boil_time: f32,
+    hop_mass: Kilograms,
+    alpha_acid: Percent,
+    volume: Liters,
+    boil_time: Minutes,
     wort_gravity: f32,
 ) -> f32 {
     todo!();
@@ -90,22 +95,22 @@ pub fn garetz_ibu(
 ///
 /// TODO: Docs should look like `tinset_ibu`
 pub fn noonan_ibu(
-    hop_mass: f32,
-    alpha_acid: f32,
-    volume: f32,
-    boil_time: f32,
+    hop_mass: Kilograms,
+    alpha_acid: Percent,
+    volume: Liters,
+    boil_time: Minutes,
     wort_gravity: f32,
 ) -> f32 {
     todo!();
 }
 
-/// Continuous approximation of utilisation factor $U$ [-] for a hop addition.
+/// Continuous approximation of utilisation factor $U$ \[-\] for a hop addition.
 ///
-/// https://www.realbeer.com/hops/research.html
+/// [Reference](https://www.realbeer.com/hops/research.html)
 ///
 /// The utilisation is the product of two factors:
-/// The 'bigness factor' $C_{big}$ [-] and
-/// the 'Boil time factor' $C_{boil}$ [-]:
+/// The 'bigness factor' $C_{big}$ \[-\] and
+/// the 'Boil time factor' $C_{boil}$ \[-\]:
 /// $$
 ///     U = C_{big}(\rho) C_{boil}(t),
 /// $$
@@ -122,12 +127,12 @@ pub fn utilisation(boil_time: f32, wort_gravity: f32) -> f32 {
     bigness_factor * boil_time_factor
 }
 
-/// Calculate correction factor for high gravity worts
+/// Calculate correction factor for high gravity worts.
 ///
-/// https://www.backtoschoolbrewing.com/blog/2016/9/5/how-to-calculate-ibus
+/// [Reference](https://www.backtoschoolbrewing.com/blog/2016/9/5/how-to-calculate-ibus)
 ///
 /// For wort with gravity $\rho \leq 1.05$, then the correction factor $C_G$
-/// is just $1$
+/// is just $1$, i.e.:
 /// $$
 ///     C_G = 1 + \max \left(0, \frac{\rho - 1.05}{ 2 } \right)
 /// $$
@@ -144,7 +149,7 @@ mod tests {
     use super::*;
     use assert_approx_eq::assert_approx_eq;
 
-    ///https://www.backtoschoolbrewing.com/blog/2016/9/5/how-to-calculate-ibus
+    // https://www.backtoschoolbrewing.com/blog/2016/9/5/how-to-calculate-ibus
     #[test]
     fn test_utilisation() {
         let calc_util = utilisation(60.0, 1.058);
@@ -154,14 +159,14 @@ mod tests {
         assert_approx_eq!(calc_util, 0.105, 0.005);
     }
 
-    ///https://www.backtoschoolbrewing.com/blog/2016/9/5/how-to-calculate-ibus
+    // https://www.backtoschoolbrewing.com/blog/2016/9/5/how-to-calculate-ibus
     #[test]
     fn test_gravity_correction_factor() {
         let calc_correction = gravity_correction_factor(1.058);
         assert_approx_eq!(calc_correction, 1.004, 0.005);
     }
 
-    ///https://www.backtoschoolbrewing.com/blog/2016/9/5/how-to-calculate-ibus
+    // https://www.backtoschoolbrewing.com/blog/2016/9/5/how-to-calculate-ibus
     #[test]
     fn test_tinseth_ibu() {
         let calc_ibu = tinseth_ibu(0.007, 8.5, 22.73, 15.0, 1.058);
