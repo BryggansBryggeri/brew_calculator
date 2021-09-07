@@ -42,4 +42,5 @@ pub mod calculations;
 pub mod ibu;
 // pub mod ph;
 mod concentration;
+pub mod units;
 pub mod utils;
